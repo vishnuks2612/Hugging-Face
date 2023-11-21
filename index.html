@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        display: grid;
+        place-items: center;
+    }
+</style>
+
+<body>
+
+    <h1>Hugging Face</h1>
+    <br>
+
+    <label for="" class="form-label">Select an Image:</label>
+    <br>
+    <input type="file" id="ImageInput" accept="image/*" class="form-control">
+
+    <br>
+
+    <img src="#" id="preview" alt="img">
+    <br>
+
+    <h2 id="result"></h2>
+
+    <script>
+
+
+        url = "https://api-inference.huggingface.co/models/Falcom/animal-classifier"
+
+
+
+        let token
+
+        document.getElementById("preview").style.display = 'none'
+
+       
+        
+
+
+        document.getElementById("ImageInput").addEventListener("change", function (event) {
+
+            let max = 0
+            let res
+
+            const file = event.target.files[0]
+            const reader = new FileReader()
+
+            reader.addEventListener("load", () => {
+
+                document.getElementById("preview").setAttribute("src", reader.result)
+                document.getElementById("preview").style.display = 'block'
+
+            })
+
+            reader.readAsDataURL(file)
+
+            reader.onloadend = () => {
+
+                const data = {
+
+                    inputs: {
+                        image: reader.result.split(",")[1]
+                    }
+
+                }
+
+
+
+
+                fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        "Authorization": "Bearer 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",
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                })
+                    .then(response => response.json())
+                    .then(data => {
+
+                        for (i = 0; i < data.length; i++) {
+
+                            if (data[i].score > max) {
+
+                                max = data[i].score
+                                res = data[i].label
+
+                            }
+                        }
+
+                        document.getElementById("result").innerText = res
+                    })
+                    .catch((e) => {
+                        console.log(e)
+                    })
+
+            }
+
+        })
+
+
+
+    </script>
+
+</body>
+
+</html>
