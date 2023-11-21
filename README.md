@@ -17,4 +17,3 @@ Here I call the API and the token from the hugging face website.
 
 The external source I used to make this html website is YouTube.
 I referres many youtube videos to make this simple website, and I adopted many suggestions and concept from them.
-Not one perfectly work, But in my code almost all the breed I tried is get correct output.
